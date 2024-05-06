@@ -160,28 +160,40 @@ namespace KG_5
                     min = max;
                     max = a;
                 }
-                area[max.X][max.Y] = area[max.X][max.Y] ^ 1;
-                for (int j = 1; j < tmp.Count; j++)
+                if (min.Y != max.Y)
                 {
-
-                    if (tmp2[j].Y == tmp2[j - 1].Y)
+                    area[max.X][max.Y] = area[max.X][max.Y] ^ 1;
+                }
+                for (int j = 1; j < tmp.Count-1; j++)
+                {
+                    if (tmp2[j].Y == min.Y&& tmp2[j].X != min.X)
                     {
-                        if (tmp2[j].X >tmp2[j - 1].X)
-                        {
-                            area[(int)tmp2[j].X][(int)tmp2[j].Y] = 0;
 
-                        }
-                        else
-                        {
-                            area[(int)tmp2[j - 1].X][(int)tmp2[j - 1].Y] = 0;
-                        }
+                        area[(int)tmp2[j].X][(int)tmp2[j].Y] = 0;
+                        continue;
+
+                    }
+                    if (tmp2[j].Y == max.Y && tmp2[j].X != max.X)
+                    {
+
+                        area[(int)tmp2[j].X][(int)tmp2[j].Y] = 0;
+                        continue;
+                    }
+                    if (tmp2[j].Y == tmp2[j + 1].Y)
+                    {
+                        area[(int)tmp2[j].X][(int)tmp2[j].Y] = 0;
                     }
                 }
-                if (area[max.X][max.Y] == 1 && max.X != 0)
-                {
-                    area[max.X - 1][max.Y] = 0;
-                    area[max.X + 1][max.Y] = 0;
-                }
+                //if ( max.X != 0)
+                //{
+                //    area[max.X - 1][max.Y] = 0;
+                //    area[max.X + 1][max.Y] = 0;
+                //}
+                //if (min.X != 0)
+                //{
+                //    area[min.X - 1][min.Y] = 0;
+                //    area[min.X + 1][min.Y] = 0;
+                //}
 
             }
         }
