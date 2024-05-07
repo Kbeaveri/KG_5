@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
@@ -22,6 +23,7 @@ namespace KG_5
         Font Fon = new Font("Arial", 9, FontStyle.Regular);
         Brush brush = new SolidBrush(Color.Black);
         Brush fillArea = new SolidBrush(Color.Red);
+        Brush noFillArea = new SolidBrush(Color.Gray);
         float divX;
         float divY;
         const int countX = 20;
@@ -135,6 +137,14 @@ namespace KG_5
                 g.DrawLine(gridPen, divX * i, 0, divX * i, pictureBoxHeight);
             }
         }
+        private int X(int a)
+        {
+            return (int)(divX + (a * divX));
+        }
+        private int Y(int a)
+        {
+            return (int)((pictureBoxHeight - divY) - a * divY);
+        }
         private void drawBorder()
         {
             for (int i = 0; i < sections.Count; i++)
@@ -153,6 +163,7 @@ namespace KG_5
                 {
                     area[(int)tmp2[j].X][(int)tmp2[j].Y] = 1;
                     g.FillRectangle(brush, tmp[j].X, tmp[j].Y, divX, divY);
+                    Thread.Sleep(100);
                 }
                 if (min.Y > max.Y)
                 {
@@ -256,21 +267,37 @@ namespace KG_5
         }
         private void drawFillArea()
         {
-            for (int i = 0; i < area.Count - 1; i++)
+            //for (int i = 0; i < area.Count - 1; i++)
+            //{
+            //    for (int j = 0; j < area[i].Count - 1; j++)
+            //    {
+            //        if (area[i][j] == 1)
+            //        {
+            //            pointList.Add(new Point(i, j));
+
+            //        }
+            //    }
+            //}
+            //pointList = Convert(pointList);
+            //for (int i = 0; i < pointList.Count; i++)
+            //{
+            //    g.FillRectangle(fillArea, pointList[i].X, pointList[i].Y, divX, divY);
+            //}
+            for (int j = 0; j < countY; j++)
             {
-                for (int j = 0; j < area[i].Count - 1; j++)
+                for (int i = 0; i < countX; i++)
                 {
                     if (area[i][j] == 1)
                     {
-                        pointList.Add(new Point(i, j));
-
+                        g.FillRectangle(fillArea,X(i), Y(j), divX, divY);
+                        Thread.Sleep(25);
+                    }
+                    if (area[i][j] == 0)
+                    {
+                        g.FillRectangle(noFillArea, X(i), Y(j), divX, divY);
+                        Thread.Sleep(25);
                     }
                 }
-            }
-            pointList = Convert(pointList);
-            for (int i = 0; i < pointList.Count; i++)
-            {
-                g.FillRectangle(fillArea, pointList[i].X, pointList[i].Y, divX, divY);
             }
         }
         private void outputFile1(string a)
@@ -319,6 +346,12 @@ namespace KG_5
                 Console.WriteLine("Exception: " + e.Message);
             }
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             inputFile();
